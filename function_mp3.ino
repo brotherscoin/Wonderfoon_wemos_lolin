@@ -32,15 +32,17 @@ void playRandom() {
 
 void mp3Wake()
 {
+  // ik kan geen overeenkomende functie vinden in de nieuwe library. dit lijkt echter prima te werken..
   execute_CMD(0x09, 0, 2); // Set Playmode to SD
   //delay(500);
 }
 
 void mp3Sleep()
 {
-  execute_CMD(0x09, 0, 3); // Set MP3 player in sleep mode
+  myDFPlayer.sleep();
+  //execute_CMD(0x09, 0, 3); // Set MP3 player in sleep mode
 
-  execute_CMD(0x0A, 0, 0); // Set MP3 player in power loss
+  //execute_CMD(0x0A, 0, 0); // Set MP3 player in power loss
 }
 
 void playTrackInFolder(int track, int folder)
