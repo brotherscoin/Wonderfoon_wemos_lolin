@@ -1,3 +1,7 @@
+/* Aangepast naar gebruik van DFRobotDFPlayerMini.
+ door rich vermeer op 24-01-2022
+*/
+
 /*
   Wonderfoon D1Mini 1001
   http://wonderfoon.eu
@@ -21,6 +25,9 @@
 # define End_Byte 0xEF
 # define Acknowledge 0x00 //Returns info with command 0x41 [0x01: info, 0x00: no info]
 # define ACTIVATED LOW
+
+#include "DFRobotDFPlayerMini.h" 
+DFRobotDFPlayerMini myDFPlayer;
 
 const bool DEB = true; //Debug
 const bool dialDisc = true;  // DialDisk
@@ -97,6 +104,8 @@ void setup() {
   delay(1);
   EEPROM.begin(256);                      // using 0-20 max
   Serial.begin(9600);                             // start serial for debug and mp3
+  myDFPlayer.begin(Serial); //  <--------------  in de originele wonderfoon wordt een 2e serial (softwareserial etc) gebruikt. dit lijkt de logische weg (op een wemos)om het te doen.
+  
   EEPROM_init(0);                          // initialize to check if this is the first time the Wonderfoon is started addess 100 = 77
 
   folderNumber = EEPROM_getFolder();
@@ -121,9 +130,10 @@ void setup() {
 
   // Setup for Numpad.b
   // switch amplifier on to read boot feedback
-  mp3Wake();
+   myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
+  //mp3Wake();
   setMP3Volume(audioVolume);
-  playTrackInFolder(10, 4);                               // Wonderfoon has started
+  playTrackInFolder(4,10);                               // Wonderfoon has started
   delay(2000);
   //put mp3 in sleep mode to save battery
   debug("Setup ready");
@@ -132,7 +142,8 @@ void setup() {
   playVolume();                                           // play vulume status
   playWillekeurig(playMode);                              // play random status
   playFolder(folderNumber);                               // play folder number status
-  mp3Sleep();                                             // set mp3 to battry save mode
+  //mp3Sleep();                                             // set mp3 to battry save mode
+   myDFPlayer.stop(); // <---  hier zit het probleem waar de yx2500 vastloopt...
   Serial.println("");
   Serial.println("Ready....");
 }
@@ -167,15 +178,16 @@ void waitForHook() {
         debug("The hook is picked up");         // only when hookstate changes and goes to low
         mp3Wake();
         setMP3Volume(audioVolume);
-        playTrackInFolder(99, 4);               // Play dailtone
+        playTrackInFolder(4,99);               // Play dailtone
       }
 
       else {                                    // if not low but high (still one time action)
         debug("The hook is down on the phone");
         countedPulses = 0;                     //reset counting parameters
         pulseCount = 0;
-        MP3stop();                             // Stop MP3Player
-        mp3Sleep();                            // Put MP3 is sleep mode since hook is down
+        //MP3stop();                             // Stop MP3Player
+        //mp3Sleep();// Put MP3 is sleep mode since hook is down
+         myDFPlayer.stop();
         PlayingContinuesly = false;
       }
       //digitalWrite(ledPin, ledState);
