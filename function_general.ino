@@ -76,6 +76,13 @@ void checkChangeWillekeurig()
       EEPROM_storePlayMode(lastDialed[3] - 1);
       playWillekeurig(lastDialed[3] - 1);
       clearLastDialed();
+    if (lastDialed[3] == 2)
+    {
+      PlayingContinuesly=true;
+    } 
+    else
+    {PlayingContinuesly=false;
+    }
     }
 
   }
@@ -143,6 +150,6 @@ void checkAll() {
   checkChangeFolder();
   checkChangeWillekeurig();
   checkChangeContinues();
-  check112();
+  //check112();
   checkReset();
 }
