@@ -1,0 +1,4 @@
+Het leek voor sommige spelers dat ze niet wilde spelen met de originele sketch van hvtil ( thank you harry :) ) , edoch, het lijkt alleen dat
+de MP3sleep(); niet correct functioneerd. Ik heb deze vervangen in de functionmp3 met MP3stop(); , en nu lijkt alles weer goed te gaan. de laatste 
+updates zijn om de rommel op te ruimen van de eerste poging met een externe library [DFRobotDFPlayerMini.h] , die wel werkte. overigens een leuke 
+library, met scanfuncties voor mapinhoud etc.    deze fork [ brotherscoin / Wonderfoon_wemos_lolin ] werkt met de yx5200 dfplayers.
